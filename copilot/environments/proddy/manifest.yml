@@ -1,0 +1,28 @@
+# The manifest for the "proddy" environment.
+# Read the full specification for the "Environment" type at:
+#  https://aws.github.io/copilot-cli/docs/manifest/environment/
+
+# Your environment name will be used in naming your resources like VPC, cluster, etc.
+name: proddy
+type: Environment
+
+# Import your own VPC and subnets or configure how they should be created.
+network:
+  vpc:
+    id: vpc-0e8ff4ab7e2ec1a8c
+    subnets:
+      public:
+        - id: subnet-044d4349b69686051
+        - id: subnet-0f1c93bf408ae8974
+      private:
+        - id: subnet-0a62a3b134a12e51d
+        - id: subnet-082bacfa6ea7f8b08
+
+# Configure the load balancers in your environment, once created.
+# http:
+#   public:
+#   private:
+
+# Configure observability for your environment resources.
+observability:
+  container_insights: false

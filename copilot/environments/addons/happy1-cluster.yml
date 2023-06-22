@@ -1,0 +1,32 @@
+Parameters:
+  App:
+    Type: String
+    Description: Your application’s name.
+  Env:
+    Type: String
+    Description: The environment name your service, job, or workflow is being deployed to.
+  # Additional parameters defined in addons.parameters.yml
+  LBARN:
+    Type: String
+    Description: ARN of the Load balancer.
+    Default: “”
+Conditions:
+  HasLB: !Not [!Equals [!Ref LBARN, ""]]
+Resources:
+  WEBACL:
+    Type: AWS::WAFv2::WebACL
+    Condition: HasLB
+    Properties:
+      Name: “myWebACL”
+      DefaultAction:
+        Block: {}
+      Scope: REGIONAL
+      VisibilityConfig:
+        CloudWatchMetricsEnabled: “true”
+        MetricName: BlockedRequests
+        SampledRequestsEnabled: “true”
+  ALBWebACLAssociation:
+    Type: AWS::WAFv2::WebACLAssociation
+    Properties:
+      ResourceArn: !Ref LBARN
+      WebACLArn: !GetAtt WEBACL.Arn
